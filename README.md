@@ -7,16 +7,16 @@ The goal for this project is to analyze how weather patterns affects air quality
 
 ## 2. Data Source 
 
-This project will combine two datasets, Base Dataset:Historical Air Quality Data for Istanbul 
+This project will combine two datasets, Base Dataset:Historical Air Quality Data for Istanbul <br />
 Source: https://openaq.org/ which aggregates data from the Turkish National Air Quality Monitoring Network (Ulusal Hava Kalitesi İzleme Ağı).
 
-Collection Plan: I am planning on using the openaq Python library to query the API for historical hourly data for the full year of 2024 (Jan 1 - Dec 31).  The data will include key pollutants, specifically PM10 and PM2.5.
+Collection Plan: I am planning on using the openaq Python library to query the API for historical hourly data for the full year of 2024 (Jan 1 - Dec 31).  The data will include key pollutants, specifically PM10 and PM2.5.<br />
 
-Second Dataset: Historical Weather Data for Istanbul
-Source: https://meteostat.net/
+Second Dataset: Historical Weather Data for Istanbul<br />
+Source: https://meteostat.net/<br />
 Collection Plan: For the same time period (2024), I will use the meteostat Python library to download historical hourly weather data from a nearby weather station. The data will include: Temprature in C, relative humidity as a percentage, precipitation in mm, average wind speed in km/h and wind direction in degrees.
 
-Combining the datasets: : Both datasets will be loaded into pandas, resampled to a consistent hourly frequency, and then merged into a single DataFrame using their timestamp as the primary key.
+Combining the datasets: Both datasets will be loaded into pandas, resampled to a consistent hourly frequency, and then merged into a single DataFrame using their timestamp as the primary key.
 
 ## 3. Analysis and Methodology
 
@@ -26,8 +26,8 @@ Hypothesis Test: I will conduct a t-test to validate the hypothesis that the mea
 
 ## 4. Appling ML methods on the dataset
 
-Method: I am planning to frame this as a regression problem.
-Target Variable: PM10 value 24 hours in the future.
-Features: Will include all weather data, time based features, and air quality metrics.
+Method: I am planning to frame this as a regression problem.<br />
+Target Variable: PM10 value 24 hours in the future.<br />
+Features: Will include all weather data, time based features, and air quality metrics.<br />
 
 Models: I am planning to start with a Linear Regression model as a baseline, then implement and compare its performance against a Random Forest Regressor or Gradient Boosting to capture more complex relationships.
