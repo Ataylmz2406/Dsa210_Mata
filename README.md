@@ -13,6 +13,7 @@ Source: https://openaq.org/ which aggregates data from the Turkish National Air 
 Collection Plan: I am planning on using the openaq Python library to query the API for historical hourly data for the full year of 2024 (Jan 1 - Dec 31).  The data will include key pollutants, specifically PM10 and PM2.5.
 
 Second Dataset: Historical Weather Data for Istanbul
+Source: https://meteostat.net/
 Collection Plan: For the same time period (2024), I will use the meteostat Python library to download historical hourly weather data from a nearby weather station. The data will include: Temprature in C, relative humidity as a percentage, precipitation in mm, average wind speed in km/h and wind direction in degrees.
 
 Combining the datasets: : Both datasets will be loaded into pandas, resampled to a consistent hourly frequency, and then merged into a single DataFrame using their timestamp as the primary key.
