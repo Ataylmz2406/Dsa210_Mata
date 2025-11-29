@@ -14,6 +14,15 @@ We tested if rain significantly reduces PM10 pollution using a Welch's T-test.
 - **P-value:** `1.4222e-44`
 > **Conclusion:** The result is **statistically significant** ($p < 0.05$). Rain helps clear the air.
 
+1.5. Secondary Hypothesis Test: Wind Ventilation
+We tested if stagnant air (< 10 km/h) significantly increases PM10 pollution.
+### Wind Analysis Results (Threshold: 10 km/h):
+- **Mean Pollution (Stagnant < 10):** 34.41 µg/m³
+- **Mean Pollution (Ventilated >= 10):** 32.66 µg/m³
+- **Difference:** 1.75 µg/m³ higher in stagnant air
+- **P-value:** `5.3503e-04`
+> **Conclusion:** Statistically significant. Low wind speeds trap pollution.
+
 ## 2. Visualizations & Exploratory Data Analysis (EDA)
 ### A. Correlation Matrix
 ![Correlation Matrix](correlation_matrix.png)

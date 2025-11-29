@@ -71,6 +71,37 @@ def run_ttest(pollutant_name):
 
 run_ttest('pm10')
 
+add_to_report("1.5. Secondary Hypothesis Test: Wind Ventilation")
+add_to_report("We tested if stagnant air (< 10 km/h) significantly increases PM10 pollution.")
+
+def run_wind_ttest(pollutant_name, threshold=10):
+    if pollutant_name not in df.columns: return
+    
+    # Split data into Stagnant vs. Ventilated
+    stagnant = df[df['wind_speed'] < threshold][pollutant_name]
+    ventilated = df[df['wind_speed'] >= threshold][pollutant_name]
+    
+    if len(stagnant) < 2 or len(ventilated) < 2:
+        add_to_report(f"Not enough data for wind analysis.")
+        return
+
+    # Run Welch's T-test
+    t_stat, p_val = stats.ttest_ind(stagnant, ventilated, equal_var=False)
+    
+    add_to_report(f"### Wind Analysis Results (Threshold: {threshold} km/h):")
+    add_to_report(f"- **Mean Pollution (Stagnant < {threshold}):** {stagnant.mean():.2f} µg/m³")
+    add_to_report(f"- **Mean Pollution (Ventilated >= {threshold}):** {ventilated.mean():.2f} µg/m³")
+    add_to_report(f"- **Difference:** {stagnant.mean() - ventilated.mean():.2f} µg/m³ higher in stagnant air")
+    add_to_report(f"- **P-value:** `{p_val:.4e}`")
+    
+    if p_val < 0.05:
+        add_to_report(f"> **Conclusion:** Statistically significant. Low wind speeds trap pollution.\n")
+    else:
+        add_to_report(f"> **Conclusion:** No significant difference found.\n")
+
+run_wind_ttest('pm10')
+
+
 #VISUALIZATIONS
 
 add_to_report("## 2. Visualizations & Exploratory Data Analysis (EDA)")
@@ -163,12 +194,12 @@ if 'pm10' in df.columns:
 
 #SAVING REPORT
 
-with open("FINAL_REPORT.md", "w", encoding="utf-8") as f:
+with open("REPORT.md", "w", encoding="utf-8") as f:
     f.writelines(report_content)
 
 print("\n" + "="*50)
 print("SUCCESS! Enhanced Analysis Complete.")
-print("1. Report created: 'FINAL_REPORT.md' (With new insights)")
+print("1. Report created: 'REPORT.md' (With new insights)")
 print("2. Data created:   'data_relations.csv'")
 print("3. Images created: 5 PNG files (Added Distribution & Hourly)")
 print("="*50)
