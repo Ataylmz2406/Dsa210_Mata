@@ -2,9 +2,9 @@
 **DSA210 Term Project Mustafa Ata Yılmaz**
 
 ## 1. Project Overview
-This project analyzes the relationship between meteorological conditions and air quality in the Kadıköy district of Istanbul, Turkey. As an industrial megacity, Istanbul frequently experiences poor air quality events. This analysis focuses on how weather patterns—specifically precipitation, wind speed, and human behavior like rush hours impact Particulate Matter (PM10) concentrations.
+This project analyzes the relationship between meteorological conditions and air quality in the Kadıköy district of Istanbul, Turkey **from October 2024 to November 2025**. As an industrial megacity, Istanbul frequently experiences poor air quality events. This analysis focuses on how weather patterns specifically precipitation, wind speed, and human behavior like rush hours impact Particulate Matter (PM10) concentrations.
 
-**Key Objective:** To statistically validate the "Washout Effect" (rain cleaning the air) and identify pollution trends driven by urban activity.
+**Key Objective:** Key Objective: To statistically validate the "Washout Effect" (rain cleaning the air) and the "Ventilation Effect" (wind dispersing pollutants), while identifying pollution trends driven by urban activity.
 
 ## 2. Data Sources
 This project combines two distinct datasets covering the period from **October 2024 to November 2025**.
@@ -100,12 +100,12 @@ python main_analysis.py
 
 After running the analysis, the following files will be generated in your project folder:
 
-  * `REPORT.md`: A comprehensive summary of findings and hypothesis test results.
-  * `data_relations.csv`: The correlation matrix of the merged dataset.
+  * **REPORT.md:** A comprehensive summary of findings and hypothesis test results.
+  * **data_relations.csv:** The correlation matrix of the merged dataset.
   * **Visualizations (PNG):**
-      * `correlation_matrix.png`
-      * `wind_vs_pm10.png`
-      * `pm10_timeseries.png`
-      * `pm10_distribution.png`
-      * `hourly_trend.png`
+      * **correlation_matrix.png**
+      * **wind_vs_pm10.png**
+      * **pm10_timeseries.png**
+      * **pm10_distribution.png**
+      * **hourly_trend.png**
 
