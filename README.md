@@ -60,7 +60,7 @@ The Random Forest model identified which factors drive pollution most significan
 The scatter plot below shows the Actual vs. Predicted PM10 levels. The tight clustering around the red line indicates strong model performance.
 
 ![Regression Results](images/ml_regression_results.png)
-## 4. How to Run
+## 5. How to Run
 
 This project is structured into three modular scripts: two for data collection and one for analysis. Follow the steps below to reproduce the results.
 
