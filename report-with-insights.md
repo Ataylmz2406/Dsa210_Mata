@@ -1,64 +1,92 @@
 # Air Quality & Weather Analysis Report
 **DSA210 Project - Kadıköy Analysis**
 
-**Data Coverage:** Successfully merged and cleaned 5,945 hourly observations from Oct 2024 to Nov 2025. This dataset covers a full annual cycle, allowing for the detection of both seasonal and daily patterns in the Kadıköy district.
+## 1. Introduction & Hypothesis
+**Project Hypothesis:** Meteorological factors (specifically precipitation and wind speed) serve as the primary natural determinants of urban air quality, while human activity cycles (rush hour) serve as the primary anthropogenic determinant.
 
-## 1. Statistical Hypothesis Tests
-We performed two Welch's T-tests to validate how meteorological factors (precipitation and wind) impact PM10 concentrations.
+**Data Coverage & Methodology:**
+We successfully merged and cleaned **5,945 hourly observations** from Oct 2024 to Nov 2025.
+* **Cleaning:** Data was cleaned to handle missing values and timezone offsets were standardized.
+
+
+## 2. Statistical Hypothesis Tests
+To validate the hypothesis, we performed two **Welch’s T-tests**.
+* We chose Welch's T-test over the T-test because our samples (Rainy vs. Dry days) have unequal sample sizes and unequal variances.
 
 ### Test A: The Washout Effect (Rain)
-We tested if rain significantly reduces PM10 pollution.
-* **Null Hypothesis ($H_0$):** Mean PM10 is the same on rainy vs. dry days.
-* **Alternative ($H_1$):** Mean PM10 differs on rainy days.
+* **Null Hypothesis ($H_0$):** Mean PM10 is equal on rainy and dry days.
+* **Alternative ($H_1$):** Mean PM10 is lower on rainy days (Precipitation cleans the air).
 
 **Results:**
 * **Mean Pollution (Dry):** 33.70 µg/m³
 * **Mean Pollution (Rainy):** 26.47 µg/m³
 * **Difference:** -7.23 µg/m³ (~21.5% reduction)
-* **P-value:** `1.4222e-44`
+* **P-value:** `1.42e-44` ($p < 0.001$)
 
-> **Conclusion:** **Highly Significant.** Rain acts as a powerful "air scrubber," reducing particulate matter by over 20%.
+> **Conclusion:** **Highly Significant.** We reject the null hypothesis. Rain acts as a powerful "air scrubber," reducing particulate matter by over 20%.
 
 ### Test B: The Ventilation Effect (Wind)
-We tested if stagnant air (wind speed < 10 km/h) leads to higher pollution accumulation compared to ventilated air (≥ 10 km/h).
-* **Null Hypothesis ($H_0$):** Mean PM10 is the same in stagnant vs. ventilated air.
-* **Alternative ($H_1$):** Mean PM10 is higher in stagnant air.
+* **Null Hypothesis ($H_0$):** Mean PM10 is equal in stagnant vs. ventilated air.
+* **Alternative ($H_1$):** Mean PM10 is higher in stagnant air (< 10 km/h).
 
 **Results:**
-* **Mean Pollution (Stagnant < 10 km/h):** 34.41 µg/m³
-* **Mean Pollution (Ventilated ≥ 10 km/h):** 32.66 µg/m³
-* **Difference:** 1.75 µg/m³ higher in stagnant air
-* **P-value:** `5.3503e-04`
+* **Mean Pollution (Stagnant):** 34.41 µg/m³
+* **Mean Pollution (Ventilated):** 32.66 µg/m³
+* **P-value:** `5.35e-04` ($p < 0.001$)
 
-> **Conclusion:** **Statistically Significant.** The low p-value ($p < 0.05$) confirms that wind speed is a statistically significant factor in air quality. Stagnant conditions trap pollutants, raising the average concentration, though the "cleaning" effect of wind in this dataset is less drastic than that of rain (1.75 µg/m³ diff vs 7.23 µg/m³ diff).
+> **Conclusion:** **Statistically Significant.** We reject the null hypothesis. Stagnant conditions trap pollutants, significantly raising average concentrations.
 
-## 2. Visualizations & Exploratory Data Analysis (EDA)
+## 3. Visualizations & Exploratory Data Analysis (EDA)
 
-### A. Correlation Matrix
-![Correlation Matrix](correlation_matrix.png)
-* **Key Finding (Temperature):** We observe a strong positive correlation between Temperature and PM10 ($r \approx 0.59$). This suggests that in this specific dataset, warmer periods coincided with higher particulate matter—potentially due to dry, dusty summer conditions or photochemical smog formation.
-* **Key Finding (Wind):** A negative correlation ($r \approx -0.15$) exists between Wind Speed and PM10. This confirms the physical mechanism of dispersion: stronger winds dilute local pollution concentrations.
-* **Key Finding (Humidity):** Humidity shows a moderate negative correlation ($r \approx -0.20$), further supporting the idea that moist air (often associated with rain/wind) helps suppress dust resuspension.
+### A. Correlation Analysis
+![Correlation Matrix](images/correlation_matrix.png)
+We analyzed the Pearson correlation coefficients ($r$) along with their p-values to ensure statistical validity ($N=5,945$).
+
+* **Temperature vs. PM10 ($r = 0.59$, $p < 0.001$):** A strong positive correlation. Warmer periods in this dataset coincide with higher pollution, likely due to dry summer conditions favoring dust resuspension.
+* **Wind Speed vs. PM10 ($r = -0.15$, $p < 0.001$):** A statistically significant negative correlation. Stronger winds dilute pollution.
+* **Humidity vs. PM10 ($r = -0.20$, $p < 0.001$):** Moderate negative correlation; moist air helps suppress dust.
 
 ### B. Scatter Plot (Wind vs. Pollution)
-![Scatter Plot](wind_vs_pm10.png)
-* **Ventilation Threshold:** The plot exhibits a classic "L-shape" distribution. High pollution events (>100 µg/m³) occur exclusively at low wind speeds (typically < 10 km/h).
-* **Insight:** The plot shows an "L-shape," where extreme pollution events (>100 µg/m³) occur exclusively at low wind speeds. This aligns with our statistical test in Section 1, which confirmed that stagnant air (< 10 km/h) significantly retains more particulate matter than ventilated air ($p = 0.0005$).
+![Scatter Plot](images/wind_vs_pm10.png)
+* **The "L-Shape":** The plot reveals that extreme pollution events (>100 µg/m³) occur *exclusively* at low wind speeds (< 10 km/h). This visually confirms the "Ventilation Effect" tested in Section 2.
 
-### C. Time Series Analysis
-![Time Series](pm10_timeseries.png)
-* **Seasonality:** The data reveals distinct seasonal variance. While we expected winter peaks due to heating, the strong correlation with temperature noted in Section A suggests we should also investigate summer anomalies (e.g., Saharan dust transport events or construction activity during dry months).
-* **Volatility:** The variance in pollution levels is not constant; we see clusters of high-volatility days followed by periods of relatively clean, stable air.
+### C. Time Series Analysis (Smoothed)
+![Time Series](images/pm10_timeseries_smoothed.png)
+* **Stochasticity:** The raw hourly data is highly stochastic. By applying a 7-day moving average, the underlying seasonal trends become visible.
+* **Seasonality:** We observe distinct volatility clusters. Contrary to the expectation of winter-only pollution, we see significant spikes in warmer months, aligning with the temperature correlation found in Section 3A.
 
-### D. Data Distribution Analysis
-![Distribution](pm10_distribution.png)
-* **Skewness:** The data is heavily left-skewed. The majority of hours have "Good" to "Moderate" air quality (20–40 µg/m³), but the long tail extending to the right represents extreme outlier events that pose the greatest health risks.
-* **Statistical Note:** Although the data is not perfectly normal, the large sample size ($N > 5000$) ensures the validity of our T-test via the Central Limit Theorem.
+### D. Data Distribution
+![Distribution](images/pm10_distribution.png)
+* **Skewness:** The data is heavily left-skewed. Most hours show "Good" air (20–40 µg/m³), but the "long tail" represents rare but hazardous outlier events.
 
 ### E. Hourly Trends (Rush Hour Effect)
-![Hourly Trend](hourly_trend.png)
-**Insight into Human Behavior:**
-* **The "M" Shape:** The plot reveals a bimodal distribution characteristic of urban environments.
-* **Morning Spike (09:00):** A sharp rise correlates with morning rush hour traffic.
-* **Evening Spike (16:00 - 17:00):** A second, often broader peak occurs in the evening, likely driven by a combination of rush hour traffic returning home and the onset of residential activities (cooking/heating).
-* **The Baseline:** The lowest values typically occur in the early morning (02:00 - 04:00). This period represents the "background" pollution level of the city when anthropogenic (human) activity is at its minimum.
+![Hourly Trend](images/hourly_trend.png)
+* **The "M" Shape:** A clear bimodal distribution is visible.
+    1.  **09:00 Spike:** Morning rush hour.
+    2.  **17:00 Spike:** Evening rush hour + residential heating/cooking.
+* **Baseline:** The cleanest air consistently occurs between 02:00–04:00 (minimum human activity).
+
+## 4. Machine Learning Analysis
+We applied Machine Learning (Random Forest) to the 5,945 observations to predict air quality.
+
+### A. Predictive Modeling (Regression)
+* **Model:** `RandomForestRegressor`
+* **R² Score:** `0.86`
+* **MAE:** `3.97 µg/m³`
+
+> **Conclusion:** The high R² (0.86) proves that air quality is not random; it is highly predictable based on the interaction of Weather (Rain/Wind) and Time (Traffic cycles).
+
+### B. Risk Classification
+We trained a classifier to predict "Poor Air" events (> 40 µg/m³).
+* **Accuracy:** `93%`
+* **Precision (Poor Air):** `0.92`
+* **Recall (Poor Air):** `0.87`
+
+> **Conclusion:** The model successfully catches 87% of pollution spikes, making it a viable tool for public health warnings.
+
+### C. Feature Importance
+![Feature Importance]images/(ml_feature_importance.png)
+The model identified the drivers of pollution in this order:
+1.  **Time (Hour/Month):** The dominant factor (Human activity).
+2.  **Wind Speed:** The dominant natural factor (Ventilation).
+3.  **Temperature:** A secondary seasonal proxy.

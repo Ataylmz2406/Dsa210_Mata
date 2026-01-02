@@ -36,16 +36,30 @@ We conducted a **Welch’s T-test** to determine if rain significantly reduces P
 * **Human Behavior:** Hourly analysis revealed a distinct **"M-shaped" pattern** with peaks at **09:00** and **17:00**, correlating perfectly with Istanbul's morning and evening rush hours.
 * **Thresholds:** Pollution events (>100 µg/m³) were found to occur almost exclusively when wind speeds dropped below 10 km/h.
 
-### 5. Planned Next Steps: Machine Learning Model Implementation
+## 4. Machine Learning Analysis
+To predict Air Quality (PM10) based on weather conditions, we implemented a **Random Forest Regressor** and a **Classifier**.
 
-The next phase of this project involves framing the analysis as a regression problem to predict **PM10 levels 24 hours in the future**. 
+### Model Performance
+* **Regression (Predicting exact PM10 value):**
+    * **R² Score:** `0.86` (The model explains 86% of the variance in air quality).
+    * **MAE:** `3.97 µg/m³` (Average prediction error).
+    * *Result:* The high R² score confirms that air quality is highly predictable using weather data and time features.
+* **Classification (Predicting "Good" vs "Poor" Air):**
+    * **Accuracy:** `93%`
+    * **Recall for Poor Air:** `0.87` (The model successfully detects 87% of pollution spikes).
 
-I plan to establish a baseline using **Linear Regression**, then implement and compare its performance against ensemble methods like **Random Forest** or **Gradient Boosting (XGBoost)**. 
+### Feature Importance
+The Random Forest model identified which factors drive pollution most significantly:
+1.  **Temperature:** The strongest predictor (likely due to seasonal inversions).
+2.  **Month & Time:** Human behavioral cycles are the second most important factor.
+3.  **Wind Speed:** Confirms the "Ventilation Effect" hypothesis.
 
-These models are expected to capture the non-linear relationships identified during the EDA phase, like the specific ventilation threshold (wind < 10 km/h) and the complex "M-shaped" rush-hour volatility. 
+![Feature Importance](images/ml_feature_importance.png)
 
-The models will be trained on meteorological features, time-lagged air quality metrics, and temporal features (hour/day).
+### Prediction Visualization
+The scatter plot below shows the Actual vs. Predicted PM10 levels. The tight clustering around the red line indicates strong model performance.
 
+![Regression Results](images/ml_regression_results.png)
 ## 4. How to Run
 
 This project is structured into three modular scripts: two for data collection and one for analysis. Follow the steps below to reproduce the results.
@@ -89,13 +103,12 @@ Run the fetch scripts to download the raw data. These will generate local CSV fi
     *Output:* `kadikoy_air_quality_2024_2025.csv` (PM10, PM2.5)
 
 ### 4\. Analysis & Report Generation
-
-Once the data is collected, run the main analysis script. This script merges the datasets, cleans the data, runs hypothesis tests (Rain & Wind effects), and generates visualizations.
+Run the main analysis script for statistical tests and the ML script for predictive modeling.
 
 ```bash
 python main_analysis.py
+python ml_analysis.py
 ```
-
 ### 5\. Expected Output
 
 After running the analysis, the following files will be generated in your project folder:
@@ -108,4 +121,9 @@ After running the analysis, the following files will be generated in your projec
       * **pm10_timeseries.png**
       * **pm10_distribution.png**
       * **hourly_trend.png**
+      * **ml_regression_results.png**
+      * **ml_feature_importance.png**
 
+## 6. Limitations
+* **Limitation:** The dataset currently covers only one district (Kadıköy). Results might not generalize to the European side of Istanbul.
+* **Limitation:** We used a standard Random Forest. Deep Learning (LSTM) might better capture time-series dependencies.
